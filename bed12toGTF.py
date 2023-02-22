@@ -18,7 +18,10 @@ def getTranscript(bedfile,gtffile):
                 exonlist=[]
                 #生成一个包含exon起始位点信息的列表
                 for i in range(len(block)):
-                    exonstart=int(start)+int(blocksit[i])
+                    if i==0:
+                        exonstart=int(start)
+                    else:
+                        exonstart=int(start)+int(blocksit[i])+1
                     exonend=int(start)+int(blocksit[i])+int(block[i])
                     exonlist.append((exonstart,exonend))
                 #这里做一个if判断，判断来源，本例中一些转录本来自Iso-Seq，由红色RGB代表，一些来自ssRNA-Seq由橙色RGB代表，我们将具有多个来源的转录本默认为Iso-Seq来源
