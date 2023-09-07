@@ -13,8 +13,8 @@ def getTranscript(bedfile,gtffile):
                 chr_,start,end,name,a_,strand,b_,c_,rgb,d_,block,blocksit=line
                 #chromStart Feature在chrom中的起始位置（前坐标），chrom的第一个碱基的坐标是0，chromStart如果等于2，其实表示的是第三个碱基，feature包含这个碱基
                 start=int(start)+1
-                #chromEnd feature在chrom中的终止位置（后坐标），chromEnd如果等于5，其实表示的是第六个碱基之前的碱基，feature不包含5这个碱基
-                end=int(end)-1
+                #chromEnd feature在chrom中的终止位置（后坐标），chromEnd如果等于5，其实表示的是第六个碱基之前的碱基，feature不包含5这个碱基，但这里的5，是从start为0开始算的，即start=0，end=5，表示0，1，2，3，4这五个碱基，换成start为1开始（GTF），即为1，2，3，4，5
+                end=int(end)
                 gene=name.split(";")[0]  #基因名称
                 transcript=name.split(";")[1]  #转录本名称
                 block=block.split(",") #返回一个包含每个exon长度的列表
