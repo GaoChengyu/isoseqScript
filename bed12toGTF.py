@@ -11,6 +11,10 @@ def getTranscript(bedfile,gtffile):
     with open(gtffile,'w') as w:
             for line in readbed(bedfile):
                 chr_,start,end,name,a_,strand,b_,c_,rgb,d_,block,blocksit=line
+                #chromStart Feature在chrom中的起始位置（前坐标），chrom的第一个碱基的坐标是0，chromStart如果等于2，其实表示的是第三个碱基，feature包含这个碱基
+                start=int(start)+1
+                #chromEnd feature在chrom中的终止位置（后坐标），chromEnd如果等于5，其实表示的是第六个碱基之前的碱基，feature不包含5这个碱基
+                end=int(end)-1
                 gene=name.split(";")[0]  #基因名称
                 transcript=name.split(";")[1]  #转录本名称
                 block=block.split(",") #返回一个包含每个exon长度的列表
@@ -18,11 +22,8 @@ def getTranscript(bedfile,gtffile):
                 exonlist=[]
                 #生成一个包含exon起始位点信息的列表
                 for i in range(len(block)):
-                    if i==0:
-                        exonstart=int(start)
-                    else:
-                        exonstart=int(start)+int(blocksit[i])+1
-                    exonend=int(start)+int(blocksit[i])+int(block[i])
+                    exonstart=int(start)+int(blocksit[i])
+                    exonend=int(start)+int(blocksit[i])+int(block[i])-1
                     exonlist.append((exonstart,exonend))
                 #这里做一个if判断，判断来源，本例中一些转录本来自Iso-Seq，由红色RGB代表，一些来自ssRNA-Seq由橙色RGB代表，我们将具有多个来源的转录本默认为Iso-Seq来源
                 if rgb=="255,100,0":
